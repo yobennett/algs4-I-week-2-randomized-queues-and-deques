@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -70,20 +71,46 @@ public class Deque<E> implements Iterable<E> {
 
     // remove and return the item from the front
     public E removeFirst() throws NoSuchElementException {
-        if (!isEmpty()) {
-            return this.first.item;
-        } else {
+        if (isEmpty()) {
             throw new NoSuchElementException("Dequeue is empty");
         }
+
+        Node<E> currFirst = this.first;
+
+        this.first = currFirst.next;
+        this.size -= 1;
+
+        if (size() == 1) {
+            this.last = this.first;
+        }
+
+        return currFirst.item;
     }
 
     // remove and return the item from the end
     public E removeLast() throws NoSuchElementException {
-        if (!isEmpty()) {
-            return this.last.item;
-        } else {
+        if (isEmpty()) {
             throw new NoSuchElementException("Dequeue is empty");
         }
+
+        Node<E> currLast = this.last;
+        Node<E> node = null;
+        Iterator<Node<E>> iterator = nodeIterator();
+        while (iterator.hasNext()) {
+            node = iterator.next();
+            if (node.next == currLast) {
+                break;
+            }
+        }
+        this.last = node;
+
+        this.size -= 1;
+
+        if (size() == 1) {
+            this.first = this.last;
+        }
+
+        return currLast.item;
     }
 
     // return an iterator over items in order from front to end
@@ -107,34 +134,65 @@ public class Deque<E> implements Iterable<E> {
 
     // return an iterator over items in order from front to end
     public Iterator<Node<E>> nodeIterator() {
-        return new DequeNodeIterator(first);
+        return new DequeNodeIterator();
     }
 
     private class DequeNodeIterator implements Iterator<Node<E>> {
 
-        Node<E> currNode;
-
-        public DequeNodeIterator(Node<E> firstNode) {
-            this.currNode = firstNode;
-        }
+        Node<E> currNode = first;
 
         public boolean hasNext() {
-            return currNode.next != null;
+            return currNode != null;
         }
 
         public void remove() {}
 
         public Node<E> next() {
-            return currNode.next;
+            Node<E> node = currNode;
+            currNode = currNode.next;
+            return node;
         }
 
     }
 
     // unit testing
     public static void main(String[] args) {
-        Deque<String> deque = new Deque<String>();
-        deque.addFirst("foo");
-        deque.addFirst("bar");
-        deque.addLast("baz");
+
+        // FIFO
+        int[] test1 = new int[10];
+        int[] expected1 = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+        Deque<Integer> deque1 = new Deque<Integer>();
+        for (int i = 0; i < 10; i++) {
+            deque1.addFirst(i);
+        }
+        for (int j = 0; j < 10; j++) {
+            test1[j] = deque1.removeLast();
+        }
+        if (!Arrays.equals(test1, expected1)) {
+            System.out.println("test1: " + Arrays.toString(test1));
+            System.out.println("expected1: " + Arrays.toString(expected1));
+            throw new AssertionError("Does not match expected FIFO output");
+        } else {
+            System.out.println("Passed FIFO");
+        }
+
+        // LIFO
+        int[] test2 = new int[10];
+        int[] expected2 = new int[]{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+        Deque<Integer> deque2 = new Deque<Integer>();
+        for (int i = 0; i < 10; i++) {
+            deque2.addFirst(i);
+        }
+        for (int j = 0; j < 10; j++) {
+            test2[j] = deque2.removeFirst();
+        }
+        if (!Arrays.equals(test2, expected2)) {
+            System.out.println("test2: " + Arrays.toString(test2));
+            System.out.println("expected2: " + Arrays.toString(expected2));
+            throw new AssertionError("Does not match expected LIFO output");
+        } else {
+            System.out.println("Passed LIFO");
+        }
+
     }
 }
