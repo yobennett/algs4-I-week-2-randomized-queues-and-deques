@@ -158,6 +158,28 @@ public class Deque<E> implements Iterable<E> {
     // unit testing
     public static void main(String[] args) {
 
+        Deque<Integer> deque = new Deque<Integer>();
+
+        deque.addFirst(0);
+        if (deque.removeFirst() != 0) {
+            throw new AssertionError("Expected " + 0);
+        }
+
+        deque.addFirst(1);
+        if (deque.removeLast() != 1) {
+            throw new AssertionError("Expected " + 1);
+        }
+
+        deque.addLast(2);
+        if (deque.removeFirst() != 2) {
+            throw new AssertionError("Expected " + 2);
+        }
+
+        deque.addLast(3);
+        if (deque.removeLast() != 3) {
+            throw new AssertionError("Expected " + 3);
+        }
+
         // FIFO
         int[] test1 = new int[10];
         int[] expected1 = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -169,11 +191,7 @@ public class Deque<E> implements Iterable<E> {
             test1[j] = deque1.removeLast();
         }
         if (!Arrays.equals(test1, expected1)) {
-            System.out.println("test1: " + Arrays.toString(test1));
-            System.out.println("expected1: " + Arrays.toString(expected1));
-            throw new AssertionError("Does not match expected FIFO output");
-        } else {
-            System.out.println("Passed FIFO");
+            throw new AssertionError("Expected " + Arrays.toString(expected1) + " but got " + Arrays.toString(test1));
         }
 
         // LIFO
@@ -187,11 +205,7 @@ public class Deque<E> implements Iterable<E> {
             test2[j] = deque2.removeFirst();
         }
         if (!Arrays.equals(test2, expected2)) {
-            System.out.println("test2: " + Arrays.toString(test2));
-            System.out.println("expected2: " + Arrays.toString(expected2));
-            throw new AssertionError("Does not match expected LIFO output");
-        } else {
-            System.out.println("Passed LIFO");
+            throw new AssertionError("Expected " + Arrays.toString(expected2) + " but got " + Arrays.toString(test2));
         }
 
     }
