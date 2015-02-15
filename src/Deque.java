@@ -163,11 +163,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         public boolean hasNext() {
-            if (this.currNode != null) {
-                return this.currNode.getNext() != null;
-            } else {
-                return false;
-            }
+            return this.currNode != null;
         }
 
         public void remove() {
@@ -185,60 +181,20 @@ public class Deque<Item> implements Iterable<Item> {
     // unit testing
     public static void main(String[] args) {
 
+        /*
         Deque<Integer> deque = new Deque<Integer>();
-
-        deque.addFirst(0);
-        if (deque.removeFirst() != 0) {
-            throw new AssertionError("Expected " + 0);
+        for (int i = 0; i < 1000; i++) {
+            deque.addFirst(i);
         }
 
-        deque.addFirst(1);
-        if (deque.removeLast() != 1) {
-            throw new AssertionError("Expected " + 1);
+        int count = 0;
+        Iterator<Integer> iterator = deque.iterator();
+        while(iterator.hasNext()) {
+            iterator.next();
+            count++;
         }
 
-        deque.addLast(2);
-        if (deque.removeFirst() != 2) {
-            throw new AssertionError("Expected " + 2);
-        }
-
-        deque.addLast(3);
-        if (deque.removeLast() != 3) {
-            throw new AssertionError("Expected " + 3);
-        }
-
-        // FIFO
-        int[] test1 = new int[10];
-        int[] expected1 = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        Deque<Integer> deque1 = new Deque<Integer>();
-        for (int i = 0; i < 10; i++) {
-            deque1.addFirst(i);
-        }
-        for (int j = 0; j < 10; j++) {
-            System.out.println("deque " + j);
-            test1[j] = deque1.removeLast();
-        }
-        if (!Arrays.equals(test1, expected1)) {
-            throw new AssertionError("Expected "
-                    + Arrays.toString(expected1)
-                    + " but got " + Arrays.toString(test1));
-        }
-
-        // LIFO
-        int[] test2 = new int[10];
-        int[] expected2 = new int[]{9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
-        Deque<Integer> deque2 = new Deque<Integer>();
-        for (int i = 0; i < 10; i++) {
-            deque2.addFirst(i);
-        }
-        for (int j = 0; j < 10; j++) {
-            test2[j] = deque2.removeFirst();
-        }
-        if (!Arrays.equals(test2, expected2)) {
-            throw new AssertionError("Expected "
-                    + Arrays.toString(expected2)
-                    + " but got " + Arrays.toString(test2));
-        }
-
+        return;
+        */
     }
 }
