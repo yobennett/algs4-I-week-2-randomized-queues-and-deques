@@ -14,9 +14,39 @@ public class Deque<E> implements Iterable<E> {
     }
 
     private class Node<E> {
-        E item;
-        Node<E> prev;
-        Node<E> next;
+        private E item;
+        private Node<E> prev;
+        private Node<E> next;
+
+        public Node() {
+            this.item = null;
+            this.prev = null;
+            this.next = null;
+        }
+
+        public E getItem() {
+            return item;
+        }
+
+        public void setItem(E i) {
+            this.item = i;
+        }
+
+        public Node<E> getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Node<E> p) {
+            this.prev = p;
+        }
+
+        public Node<E> getNext() {
+            return next;
+        }
+
+        public void setNext(Node<E> n) {
+            this.next = n;
+        }
     }
 
     // is the deque empty?
@@ -30,22 +60,22 @@ public class Deque<E> implements Iterable<E> {
     }
 
     // add the item to the front
-    public void addFirst(E e) throws NullPointerException {
+    public void addFirst(E e) {
         if (e == null) {
             throw new NullPointerException("Cannot add null item");
         }
 
         Node<E> node = new Node<E>();
-        node.item = e;
-        node.prev = null;
+        node.setItem(e);
+        node.setPrev(null);
 
         if (isEmpty()) {
-            node.next = null;
+            node.setNext(null);
             this.last = node;
         } else {
             Node<E> currFirst = this.first;
-            currFirst.prev = node;
-            node.next = currFirst;
+            currFirst.setPrev(node);
+            node.setNext(currFirst);
         }
 
         this.first = node;
@@ -53,22 +83,22 @@ public class Deque<E> implements Iterable<E> {
     }
 
     // add the item to the end
-    public void addLast(E e) throws NullPointerException {
+    public void addLast(E e) {
         if (e == null) {
             throw new NullPointerException("Cannot add null item");
         }
 
         Node<E> node = new Node<E>();
-        node.item = e;
-        node.prev = null;
-        node.next = null;
+        node.setItem(e);
+        node.setPrev(null);
+        node.setNext(null);
 
         if (isEmpty()) {
             this.first = node;
         } else {
             Node<E> currLast = this.last;
-            currLast.next = node;
-            node.prev = currLast;
+            currLast.setNext(node);
+            node.setPrev(currLast);
         }
 
         this.last = node;
@@ -76,15 +106,15 @@ public class Deque<E> implements Iterable<E> {
     }
 
     // remove and return the item from the front
-    public E removeFirst() throws NoSuchElementException {
+    public E removeFirst() {
         if (isEmpty()) {
             throw new NoSuchElementException("Dequeue is empty");
         }
 
         Node<E> currFirst = this.first;
-        Node<E> newFirst = currFirst.next;
+        Node<E> newFirst = currFirst.getNext();
         if (newFirst != null) {
-            newFirst.prev = null;
+            newFirst.setPrev(null);
         }
         this.first = newFirst;
 
@@ -94,19 +124,19 @@ public class Deque<E> implements Iterable<E> {
             this.last = this.first;
         }
 
-        return currFirst.item;
+        return currFirst.getItem();
     }
 
     // remove and return the item from the end
-    public E removeLast() throws NoSuchElementException {
+    public E removeLast() {
         if (isEmpty()) {
             throw new NoSuchElementException("Dequeue is empty");
         }
 
         Node<E> currLast = this.last;
-        Node<E> newLast = currLast.prev;
+        Node<E> newLast = currLast.getPrev();
         if (newLast != null) {
-            newLast.next = null;
+            newLast.setNext(null);
         }
         this.last = newLast;
 
@@ -116,7 +146,7 @@ public class Deque<E> implements Iterable<E> {
             this.first = this.last;
         }
 
-        return currLast.item;
+        return currLast.getItem();
     }
 
     // return an iterator over items in order from front to end
@@ -126,22 +156,24 @@ public class Deque<E> implements Iterable<E> {
 
     private class DequeIterator implements Iterator<E> {
 
-        Node<E> currNode;
+        private Node<E> currNode;
 
         public DequeIterator() {
-            currNode = first;
+            this.currNode = first;
         }
 
         public boolean hasNext() {
-            return currNode.next != null;
+            return this.currNode.getNext() != null;
         }
 
-        public void remove() {}
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
 
         public E next() {
-            Node<E> node = currNode;
-            currNode = currNode.next;
-            return node.item;
+            Node<E> node = this.currNode;
+            this.currNode = this.currNode.getNext();
+            return node.getItem();
         }
 
     }
@@ -179,10 +211,13 @@ public class Deque<E> implements Iterable<E> {
             deque1.addFirst(i);
         }
         for (int j = 0; j < 10; j++) {
+            System.out.println("deque " + j);
             test1[j] = deque1.removeLast();
         }
         if (!Arrays.equals(test1, expected1)) {
-            throw new AssertionError("Expected " + Arrays.toString(expected1) + " but got " + Arrays.toString(test1));
+            throw new AssertionError("Expected "
+                    + Arrays.toString(expected1)
+                    + " but got " + Arrays.toString(test1));
         }
 
         // LIFO
@@ -196,7 +231,9 @@ public class Deque<E> implements Iterable<E> {
             test2[j] = deque2.removeFirst();
         }
         if (!Arrays.equals(test2, expected2)) {
-            throw new AssertionError("Expected " + Arrays.toString(expected2) + " but got " + Arrays.toString(test2));
+            throw new AssertionError("Expected "
+                    + Arrays.toString(expected2)
+                    + " but got " + Arrays.toString(test2));
         }
 
     }

@@ -7,7 +7,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
     private int capacity;
     private int size;
 
-    @SuppressWarnings("unchecked")
+//    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         capacity = 1;
         q = (E[]) new Object[capacity]; // ugly cast
@@ -24,7 +24,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
         return size;
     }
 
-    @SuppressWarnings("unchecked")
+//    @SuppressWarnings("unchecked")
     private void resize(int newCapacity) {
         E[] copy = (E[]) new Object[newCapacity];
         for (int i = 0; i < size; i++) {
@@ -59,7 +59,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
         RandomSample sample = new RandomSample();
 
         size -= 1;
-        q[sample.index] = q[size];
+        q[sample.index()] = q[size];
         q[size] = null;
 
         // resize down to 1/4 capacity (or 1 if empty)
@@ -69,17 +69,25 @@ public class RandomizedQueue<E> implements Iterable<E> {
             resize(1);
         }
 
-        return sample.value;
+        return sample.value();
     }
 
     private class RandomSample {
 
-        public int index;
-        public E value;
+        private int index;
+        private E value;
 
         public RandomSample() {
             this.index = StdRandom.uniform(size);
             this.value = q[index];
+        }
+
+        public int index() {
+            return this.index;
+        }
+
+        public E value() {
+            return this.value;
         }
 
     }
@@ -91,7 +99,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
         }
 
         RandomSample sample = new RandomSample();
-        return sample.value;
+        return sample.value();
     }
 
     // return an independent iterator over items in random order
@@ -179,8 +187,8 @@ public class RandomizedQueue<E> implements Iterable<E> {
                 } else {
                     System.out.println("Deque: " + q.dequeue() + " " + q.toString());
                 }
-            } catch (Exception e) {
-                System.out.println("ERROR: " + e);
+            } finally {
+                System.out.println("BOOM!");
             }
         }
     }
