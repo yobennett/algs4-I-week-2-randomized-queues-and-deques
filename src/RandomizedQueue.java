@@ -7,6 +7,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
     private int capacity;
     private int size;
 
+    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         capacity = 1;
         q = (E[]) new Object[capacity]; // ugly cast
@@ -23,8 +24,8 @@ public class RandomizedQueue<E> implements Iterable<E> {
         return size;
     }
 
+    @SuppressWarnings("unchecked")
     private void resize(int newCapacity) {
-        //System.out.println("\nresizing from " + capacity + " to " + newCapacity + "\n");
         E[] copy = (E[]) new Object[newCapacity];
         for (int i = 0; i < size; i++) {
             copy[i] = q[i];
@@ -61,9 +62,11 @@ public class RandomizedQueue<E> implements Iterable<E> {
         q[sample.index] = q[size];
         q[size] = null;
 
-        // resize down to 1/4 capacity
+        // resize down to 1/4 capacity (or 1 if empty)
         if (!isEmpty() && (size() <= capacity / 4)) {
             resize(capacity / 2);
+        } else if (isEmpty()) {
+            resize(1);
         }
 
         return sample.value;
@@ -75,7 +78,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
         public E value;
 
         public RandomSample() {
-            this.index = StdRandom.uniform(size);;
+            this.index = StdRandom.uniform(size);
             this.value = q[index];
         }
 
@@ -93,16 +96,27 @@ public class RandomizedQueue<E> implements Iterable<E> {
 
     // return an independent iterator over items in random order
     public Iterator<E> iterator() {
-        return new RandomizedQueueIterator();
+        return new RandomizedQueueIterator(size);
     }
 
     private class RandomizedQueueIterator implements Iterator<E> {
 
-        public RandomizedQueueIterator() {
+        private int[] indexes;
+        private int index;
+        private int size;
+
+        public RandomizedQueueIterator(int size) {
+            this.size = size;
+            indexes = new int[this.size];
+            for (int i = 0; i < this.size; i++) {
+                indexes[i] = i;
+            }
+            StdRandom.shuffle(indexes);
+            index = 0;
         }
 
         public boolean hasNext() {
-            return false;
+            return index < this.size;
         }
 
         public void remove() {
@@ -110,11 +124,13 @@ public class RandomizedQueue<E> implements Iterable<E> {
         }
 
         public E next() {
-            if (isEmpty()) {
+            if (!hasNext()) {
                 throw new NoSuchElementException("RandomizedQueue is empty");
             }
 
-            return null;
+            int currIndex = index;
+            index += 1;
+            return q[indexes[currIndex]];
         }
 
     }
@@ -131,12 +147,22 @@ public class RandomizedQueue<E> implements Iterable<E> {
         q.enqueue(100);
         q.dequeue();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 5; i++) {
             q.enqueue(i);
             System.out.println("After enqueue " + i + " " + q.toString());
         }
 
-        for (int j = 0; j < 100; j++) {
+        System.out.println("\nIterator 1");
+        for (Iterator<Integer> iterator1 = q.iterator(); iterator1.hasNext();) {
+            System.out.println("next -> " + iterator1.next());
+        }
+
+        System.out.println("\nIterator 2");
+        for (Iterator<Integer> iterator2 = q.iterator(); iterator2.hasNext();) {
+            System.out.println("next -> " + iterator2.next());
+        }
+
+        for (int j = 0; j < 5; j++) {
             System.out.println("Deque: " + q.dequeue() + " " + q.toString());
         }
         System.out.println("After dequeue: " + q.toString());
