@@ -13,10 +13,10 @@ public class Deque<Item> implements Iterable<Item> {
         this.size = 0;
     }
 
-    private class Node<E> {
-        private E item;
-        private Node<E> prev;
-        private Node<E> next;
+    private class Node<Item> {
+        private Item item;
+        private Node<Item> prev;
+        private Node<Item> next;
 
         public Node() {
             this.item = null;
@@ -24,27 +24,27 @@ public class Deque<Item> implements Iterable<Item> {
             this.next = null;
         }
 
-        public E getItem() {
+        public Item getItem() {
             return item;
         }
 
-        public void setItem(E i) {
+        public void setItem(Item i) {
             this.item = i;
         }
 
-        public Node<E> getPrev() {
+        public Node<Item> getPrev() {
             return prev;
         }
 
-        public void setPrev(Node<E> p) {
+        public void setPrev(Node<Item> p) {
             this.prev = p;
         }
 
-        public Node<E> getNext() {
+        public Node<Item> getNext() {
             return next;
         }
 
-        public void setNext(Node<E> n) {
+        public void setNext(Node<Item> n) {
             this.next = n;
         }
     }

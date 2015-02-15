@@ -143,39 +143,8 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     }
 
-    public String toString() {
-        return "size=" + size() + ", capacity=" + capacity;
-    }
-
     // unit testing
     public static void main(String[] args) {
-        RandomizedQueue<Integer> q = new RandomizedQueue<Integer>();
-
-        // one element enqueue and dequeue
-        q.enqueue(100);
-        if (!q.sample().equals(q.dequeue())) {
-            System.out.println("Failed enqueue, sample, dequeue");
-        }
-
-        for (int i = 0; i < 5; i++) {
-            q.enqueue(i);
-            System.out.println("After enqueue " + i + " " + q.toString());
-        }
-
-        System.out.println("\nIterator 1");
-        for (int x : q) {
-            System.out.println("next -> " + x);
-        }
-
-        System.out.println("\nIterator 2");
-        for (int x : q) {
-            System.out.println("next -> " + x);
-        }
-
-        for (int j = 0; j < 5; j++) {
-            System.out.println("Deque: " + q.dequeue() + " " + q.toString());
-        }
-        System.out.println("After dequeue: " + q.toString());
     }
 
 }
