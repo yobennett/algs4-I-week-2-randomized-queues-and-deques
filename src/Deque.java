@@ -163,7 +163,11 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         public boolean hasNext() {
-            return this.currNode.getNext() != null;
+            if (this.currNode != null) {
+                return this.currNode.getNext() != null;
+            } else {
+                return false;
+            }
         }
 
         public void remove() {
