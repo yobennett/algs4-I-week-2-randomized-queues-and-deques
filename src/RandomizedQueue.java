@@ -55,7 +55,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
             throw new NoSuchElementException("RandomizedQueue is empty");
         }
 
-        // randon sample, swap sample item and last item, reduce size
+        // random sample, swap sample item and last item, reduce size
         RandomSample sample = new RandomSample();
 
         size -= 1;
@@ -145,7 +145,9 @@ public class RandomizedQueue<E> implements Iterable<E> {
 
         // one element enqueue and dequeue
         q.enqueue(100);
-        q.dequeue();
+        if (!q.sample().equals(q.dequeue())) {
+            System.out.println("Failed enqueue, sample, dequeue");
+        }
 
         for (int i = 0; i < 5; i++) {
             q.enqueue(i);
@@ -153,19 +155,34 @@ public class RandomizedQueue<E> implements Iterable<E> {
         }
 
         System.out.println("\nIterator 1");
-        for (Iterator<Integer> iterator1 = q.iterator(); iterator1.hasNext();) {
-            System.out.println("next -> " + iterator1.next());
+        for (int x : q) {
+            System.out.println("next -> " + x);
         }
 
         System.out.println("\nIterator 2");
-        for (Iterator<Integer> iterator2 = q.iterator(); iterator2.hasNext();) {
-            System.out.println("next -> " + iterator2.next());
+        for (int x : q) {
+            System.out.println("next -> " + x);
         }
 
         for (int j = 0; j < 5; j++) {
             System.out.println("Deque: " + q.dequeue() + " " + q.toString());
         }
         System.out.println("After dequeue: " + q.toString());
+
+
+        System.out.println("\nRandom enqueue/dequeue test...");
+        for (int k = 0; k < 1000; k++) {
+            try {
+                if (StdRandom.uniform(0, 2) % 2 == 0) {
+                    q.enqueue(k);
+                    System.out.println("After enqueue " + k + " " + q.toString());
+                } else {
+                    System.out.println("Deque: " + q.dequeue() + " " + q.toString());
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR: " + e);
+            }
+        }
     }
 
 }
