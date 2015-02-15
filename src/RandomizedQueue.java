@@ -1,16 +1,16 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class RandomizedQueue<E> implements Iterable<E> {
+public class RandomizedQueue<Item> implements Iterable<Item> {
 
-    private E[] q;
+    private Item[] q;
     private int capacity;
     private int size;
 
 //    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         capacity = 1;
-        q = (E[]) new Object[capacity]; // ugly cast
+        q = (Item[]) new Object[capacity]; // ugly cast
         size = 0;
     }
 
@@ -26,7 +26,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
 
 //    @SuppressWarnings("unchecked")
     private void resize(int newCapacity) {
-        E[] copy = (E[]) new Object[newCapacity];
+        Item[] copy = (Item[]) new Object[newCapacity];
         for (int i = 0; i < size; i++) {
             copy[i] = q[i];
         }
@@ -35,8 +35,8 @@ public class RandomizedQueue<E> implements Iterable<E> {
     }
 
     // add the item
-    public void enqueue(E e) {
-        if (e == null) {
+    public void enqueue(Item item) {
+        if (item == null) {
             throw new NullPointerException("Cannot add null item");
         }
 
@@ -45,12 +45,12 @@ public class RandomizedQueue<E> implements Iterable<E> {
             resize(2 * capacity);
         }
 
-        q[size] = e;
+        q[size] = item;
         size += 1;
     }
 
     // remove and return a random item
-    public E dequeue() {
+    public Item dequeue() {
         if (isEmpty()) {
             throw new NoSuchElementException("RandomizedQueue is empty");
         }
@@ -75,7 +75,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
     private class RandomSample {
 
         private int index;
-        private E value;
+        private Item value;
 
         public RandomSample() {
             this.index = StdRandom.uniform(size);
@@ -86,14 +86,14 @@ public class RandomizedQueue<E> implements Iterable<E> {
             return this.index;
         }
 
-        public E value() {
+        public Item value() {
             return this.value;
         }
 
     }
 
     // return (but do not remove) a random item
-    public E sample() {
+    public Item sample() {
         if (isEmpty()) {
             throw new NoSuchElementException("RandomizedQueue is empty");
         }
@@ -103,11 +103,11 @@ public class RandomizedQueue<E> implements Iterable<E> {
     }
 
     // return an independent iterator over items in random order
-    public Iterator<E> iterator() {
+    public Iterator<Item> iterator() {
         return new RandomizedQueueIterator(size);
     }
 
-    private class RandomizedQueueIterator implements Iterator<E> {
+    private class RandomizedQueueIterator implements Iterator<Item> {
 
         private int[] indexes;
         private int index;
@@ -131,7 +131,7 @@ public class RandomizedQueue<E> implements Iterable<E> {
             throw new UnsupportedOperationException();
         }
 
-        public E next() {
+        public Item next() {
             if (!hasNext()) {
                 throw new NoSuchElementException("RandomizedQueue is empty");
             }
@@ -176,21 +176,6 @@ public class RandomizedQueue<E> implements Iterable<E> {
             System.out.println("Deque: " + q.dequeue() + " " + q.toString());
         }
         System.out.println("After dequeue: " + q.toString());
-
-
-        System.out.println("\nRandom enqueue/dequeue test...");
-        for (int k = 0; k < 1000; k++) {
-            try {
-                if (StdRandom.uniform(0, 2) % 2 == 0) {
-                    q.enqueue(k);
-                    System.out.println("After enqueue " + k + " " + q.toString());
-                } else {
-                    System.out.println("Deque: " + q.dequeue() + " " + q.toString());
-                }
-            } finally {
-                System.out.println("BOOM!");
-            }
-        }
     }
 
 }
