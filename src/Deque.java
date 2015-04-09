@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -120,7 +119,7 @@ public class Deque<Item> implements Iterable<Item> {
 
         this.size -= 1;
 
-        if (size() == 1) {
+        if (size() <= 1) {
             this.last = this.first;
         }
 
@@ -142,7 +141,7 @@ public class Deque<Item> implements Iterable<Item> {
 
         this.size -= 1;
 
-        if (size() == 1) {
+        if (size() <= 1) {
             this.first = this.last;
         }
 
@@ -167,11 +166,16 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         public void remove() {
-            throw new NoSuchElementException();
+            throw new UnsupportedOperationException();
         }
 
         public Item next() {
             Node<Item> node = this.currNode;
+
+            if (node == null) {
+                throw new NoSuchElementException();
+            }
+
             this.currNode = this.currNode.getNext();
             return node.getItem();
         }
@@ -180,21 +184,5 @@ public class Deque<Item> implements Iterable<Item> {
 
     // unit testing
     public static void main(String[] args) {
-
-        /*
-        Deque<Integer> deque = new Deque<Integer>();
-        for (int i = 0; i < 1000; i++) {
-            deque.addFirst(i);
-        }
-
-        int count = 0;
-        Iterator<Integer> iterator = deque.iterator();
-        while(iterator.hasNext()) {
-            iterator.next();
-            count++;
-        }
-
-        return;
-        */
     }
 }
